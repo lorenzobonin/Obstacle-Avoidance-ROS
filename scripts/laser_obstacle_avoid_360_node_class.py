@@ -6,28 +6,28 @@ import rospy
 from geometry_msgs.msg import Twist #ros msg that deals with moving the robot
 from sensor_msgs.msg import LaserScan #ros msg that gets the laser scans
 
-def main():
-
+def run():
     vel = Twist()
-    # Instanciate our avoider object
+    # Istanziamo l'oggetto avoider
     avoider = Avoider(vel)
-    # Initialize our node
-    rospy.init_node("Laser_Obs_Avoid_node")
-    # Subscribe to the "/scan" topic in order to read laser scans data from it
+    # Sottoscriviamoci al topic /scan per ricevere i dati provenienti dal lidar
     rospy.Subscriber("/scan", LaserScan, avoider.indentify_regions)
-    #create our publisher that'll publish to the "/cmd_vel" topic
-    pub = rospy.Publisher("/cmd_vel", Twist, queue_size = 1)
-    #ros will try to run this code 10 times/second
+    # Istanziamo un oggetto publisher per poter pubblicare i dati 
+    publisher = rospy.Publisher("/cmd_vel", Twist, queue_size = 1)
+    # Decidiamo una frequenza a cui far girare il ciclo seguente
     rate = rospy.Rate(10) #10Hz
-    
-    #keep running while the ros-master isn't shutdown
+    # Eseguiamo il ciclo fino a quando il nodo non ha terminato la propria esecuzione
     while not rospy.is_shutdown():
+        # Ad ogni iterazione, calcoliamo le velocita` corrette tramite l'oggetto definito in precedenza
         vel = avoider.avoid()
-        pub.publish(vel)
+        # Pubblichiamo le velocita` sul topic corretto
+        publisher.publish(vel)
         rate.sleep()
 
 if __name__ == "__main__":
     try:
-        main()
+        # Inizializziamo il nodo responsabile dell'obstacle avoidance assegnandogli un nome adatto
+        rospy.init_node("obstacle_avoider_node")
+        run()
     except rospy.ROSInterruptException:
         pass

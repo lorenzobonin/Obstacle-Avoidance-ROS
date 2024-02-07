@@ -63,12 +63,11 @@ class Avoider():
 
 	def avoid(self):
 		act, ang_vel = self._clearance_test()
-		# If act is False, and_vel is set to 0
+		# If act is False, ang_vel is set to 0
 		self._steer(act, (act*ang_vel))
 		return self.vel_obj
 
 	def _clearance_test(self):
-
 		goal = "front_C"
 		closest = 10e6
 		regional_dist = 0
