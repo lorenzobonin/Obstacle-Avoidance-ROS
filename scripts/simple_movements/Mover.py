@@ -42,9 +42,10 @@ class Mover():
 	
 	def _linear(self, t_interval):
 		'''
-		:param lin_vel_x  : La velocità lineare del robot in direzione x
-		:param ang_vel    : La velocità angolare del robot
+		:param t_interval	: Il tempo trascorso dall'inizio (t_interval=t-t0)
 		'''
+		# Il robot si muove in linea retta per 1m
+		# Ad una vecità di 0.1m/s impiega 10s
 		if t_interval >= 0 and t_interval <= 10:
 			lin_vel_x = self.LIN_VEL_X
 			ang_vel = 0
@@ -53,17 +54,21 @@ class Mover():
 		else:
 			lin_vel_x = 0
 			ang_vel = 0
+		# Come ultima cosa, la funzione deve ritornare le due variabili lin_vel_x e ang_vel
 		return lin_vel_x, ang_vel
 
 	def _diagonal(self, t_interval):
 		'''
-		:param lin_vel_x  : La velocità lineare del robot in direzione x
-		:param ang_vel    : La velocità angolare del robot
+		:param t_interval	: Il tempo trascorso dall'inizio (t_interval=t-t0)
 		'''
+		# Il robot si gira di 45° (pi/4 rad)
+		# Ad una velocità di 0.4rad/s impiega circa 2s
 		if t_interval >= 0 and t_interval < 2:
 			lin_vel_x = 0.0
 			ang_vel = self.ANG_VEL
-		elif t_interval >= 2 and t_interval <= 12:
+		# Il robot si muove in linea retta per circa 1.4m (1*sqrt(2))
+		# Ad una vecità di 0.1m/s impiega 14s
+		elif t_interval >= 2 and t_interval <= 16:
 			lin_vel_x = self.LIN_VEL_X
 			ang_vel = 0
 		# Il robot è arrivato a destinazione!
@@ -71,42 +76,50 @@ class Mover():
 		else:
 			lin_vel_x = 0
 			ang_vel = 0
+		# Come ultima cosa, la funzione deve ritornare le due variabili lin_vel_x e ang_vel
 		return lin_vel_x, ang_vel
 
 	def _square(self, t_interval):
 		'''
-		:param lin_vel_x  : La velocità lineare del robot in direzione x
-		:param ang_vel    : La velocità angolare del robot
+		:param t_interval	: Il tempo trascorso dall'inizio (t_interval=t-t0)
 		'''
-		# Primo lato del quadrato, il robot fa 10 step in direzione x avanzando di 0.1m ciascuno
+		# Primo lato del quadrato: il robot si muove in linea retta per 1m
+		# Ad una vecità di 0.1m/s impiega 10s
 		if t_interval >= 0 and t_interval <10:
 			lin_vel_x = self.LIN_VEL_X
 			ang_vel = 0
-		# Prima rotazione, il robot fa quattro step ruotando di (pi/2)/4 ciascuno
+		# Prima rotazione: il robot si gira di 90° (pi/2 rad)
+		# Ad una velocità di 0.4rad/s impiega circa 4s
 		elif t_interval >= 10 and t_interval < 14:
 			lin_vel_x = 0
 			ang_vel = self.ANG_VEL
-		# Secondo lato del quadrato, il robot fa 10 step in direzione x avanzando di 0.1m ciascuno
+		# Secondo lato del quadrato: il robot si muove in linea retta per 1m
+		# Ad una vecità di 0.1m/s impiega 10s
 		elif t_interval >= 14 and t_interval < 24:
 			lin_vel_x = self.LIN_VEL_X
 			ang_vel = 0
-		# Seconda rotazione, il robot fa quattro step ruotando di (pi/2)/4 ciascuno
+		# Seconda rotazione: il robot si gira di 90° (pi/2 rad)
+		# Ad una velocità di 0.4rad/s impiega circa 4s
 		elif t_interval >= 24 and t_interval < 28:
 			lin_vel_x = 0
 			ang_vel = self.ANG_VEL
-		# Terzo lato del quadrato, il robot fa 10 step in direzione x avanzando di 0.1m ciascuno
+		# Terzo lato del quadrato: il robot si muove in linea retta per 1m
+		# Ad una vecità di 0.1m/s impiega 10s
 		elif t_interval >= 28 and t_interval < 38:
 			lin_vel_x = self.LIN_VEL_X
 			ang_vel = 0
-		# Terza rotazione, il robot fa quattro step ruotando di (pi/2)/4 ciascuno
+		# Terza rotazione: il robot si gira di 90° (pi/2 rad)
+		# Ad una velocità di 0.4rad/s impiega circa 4s
 		elif t_interval >= 38 and t_interval < 42:
 			lin_vel_x = 0
 			ang_vel = self.ANG_VEL
-		# Quarto lato del quadrato, il robot fa 10 step in direzione x avanzando di 0.1m ciascuno
+		# Quarto lato del quadrato: il robot si muove in linea retta per 1m
+		# Ad una vecità di 0.1m/s impiega 10s
 		elif t_interval >= 42 and t_interval < 52:
 			lin_vel_x = self.LIN_VEL_X
 			ang_vel = 0
-		# Quarta rotazione, il robot fa quattro step ruotando di (pi/2)/4 ciascuno
+		# Quarta rotazione: il robot si gira di 90° (pi/2 rad)
+		# Ad una velocità di 0.4rad/s impiega circa 4s
 		elif t_interval >= 52 and t_interval < 56:
 			lin_vel_x = 0
 			ang_vel = self.ANG_VEL
@@ -115,6 +128,7 @@ class Mover():
 		else:
 			lin_vel_x = 0
 			ang_vel = 0
+		# Come ultima cosa, la funzione deve ritornare le due variabili lin_vel_x e ang_vel
 		return lin_vel_x, ang_vel
 
 
