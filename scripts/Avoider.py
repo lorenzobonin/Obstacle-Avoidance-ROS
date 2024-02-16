@@ -19,8 +19,8 @@ class Avoider():
 	                 	}
 
 	def __init__(self, vel_obj, obstacle_threshold=0.5, 
-				       regional_angle=30, normal_lin_vel=0.5, 
-				       trans_lin_vel=-0.09, trans_ang_vel=1.75):
+				       regional_angle=30, normal_lin_vel=0.1, 
+				       trans_lin_vel=-0.09, trans_ang_vel=0.5):
 		'''
 		:param vel_obj           : Velocity object; will contain velocity commands(data); Twist()
 		:param obstacle_threshold: Objects a this distance or below are considered obstacles
@@ -53,13 +53,13 @@ class Avoider():
 		# The front central region necessitate getting the last and first 15 points of the ranges
 		intermediary = scan.ranges[:int(self.REGIONAL_ANGLE/2)]\
 					 + scan.ranges[(len(scan.ranges)-1)*int(self.REGIONAL_ANGLE/2):]
-		self.Regions_Report["front_C"] = [x for x in intermediary if x <= self.OBSTACLE_DIST and x != 'inf']
+		self.Regions_Report["front_C"] = [x for x in intermediary if x < self.OBSTACLE_DIST and x != 'inf' and x !=0]
 		
 		# Enumerate all regions but the first
 		for i, region in enumerate(REGIONS[1:]):
 			# Only objects at a distance less than or equal to the threshold are considered obstacles
 			self.Regions_Report[region] = [x for x in scan.ranges[self.REGIONAL_ANGLE*i:self.REGIONAL_ANGLE*(i+1)]\
-												   if x <= self.OBSTACLE_DIST and x != 'inf']
+												   if x < self.OBSTACLE_DIST and x != 'inf' and x !=0]
 
 	def avoid(self):
 		act, ang_vel = self._clearance_test()
