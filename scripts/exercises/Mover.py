@@ -14,9 +14,9 @@ class Mover():
         self.LIN_VEL_X = lin_vel_x_when_not_zero
         self.ANG_VEL  = ang_vel_when_not_zero
 
-    def move(self, t_interval, move_type="linear"):
+    def move(self, t_elapsed, move_type="linear"):
         '''
-        :param t_interval	: Il tempo trascorso dall'inizio (t_interval=t-t0)
+        :param t_elapsed	: Il tempo trascorso dall'inizio (t_elapsed=t-t0)
         :param move_type	: Il tipo di movimento per il robot, a scelta tra 'linear', 'diagonal' e 'square'
         '''
         # Il metodo move si occupa di far muovere il robot in base alla tipologia di movimento
@@ -29,11 +29,11 @@ class Mover():
         # e al time step a cui ci troviamo
 
         if move_type == "linear":
-            lin_vel_x, ang_vel = self._linear(t_interval)
+            lin_vel_x, ang_vel = self._linear(t_elapsed)
         elif move_type == "diagonal":
-            lin_vel_x, ang_vel = self._diagonal(t_interval)
+            lin_vel_x, ang_vel = self._diagonal(t_elapsed)
         elif move_type == "square":
-            lin_vel_x, ang_vel = self._square(t_interval)
+            lin_vel_x, ang_vel = self._square(t_elapsed)
 
         # Ora possiamo utilizzare il metodo _steer per impostare le velocità appena calcolate al robot
         self._steer(lin_vel_x, ang_vel)
@@ -41,9 +41,9 @@ class Mover():
         return self.vel_obj
         
     
-    def _linear(self, t_interval):
+    def _linear(self, t_elapsed):
         '''
-        :param t_interval	: Il tempo trascorso dall'inizio (t_interval=t-t0)
+        :param t_elapsed	: Il tempo trascorso dall'inizio (t_elapsed=t-t0)
         '''
         # Il robot si muove in linea retta per 1m
         # ------- scrivere il codice qua sotto -------
@@ -58,9 +58,9 @@ class Mover():
         
 
 
-    def _diagonal(self, t_interval):
+    def _diagonal(self, t_elapsed):
         '''
-        :param t_interval	: Il tempo trascorso dall'inizio (t_interval=t-t0)
+        :param t_elapsed	: Il tempo trascorso dall'inizio (t_elapsed=t-t0)
         '''
         # Il robot si gira di 45° (pi/4 rad)
         # ------- scrivere il codice qua sotto -------
@@ -79,9 +79,9 @@ class Mover():
 
 
 
-    def _square(self, t_interval):
+    def _square(self, t_elapsed):
         '''
-        :param t_interval	: Il tempo trascorso dall'inizio (t_interval=t-t0)
+        :param t_elapsed	: Il tempo trascorso dall'inizio (t_elapsed=t-t0)
         '''
         # Primo lato del quadrato: il robot si muove in linea retta per 1m
         # ------- scrivere il codice qua sotto -------
