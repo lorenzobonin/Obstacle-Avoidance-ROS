@@ -22,6 +22,7 @@ def run():
         vel = avoider.avoid()
         # Pubblichiamo le velocita` sul topic corretto
         publisher.publish(vel)
+        #print(Avoider.Regions_Report["front_C"])
         rate.sleep()
 
 if __name__ == "__main__":
