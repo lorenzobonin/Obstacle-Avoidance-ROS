@@ -57,9 +57,7 @@ class Avoider():
 				  ]
 
 		# Scannerizziamo la prima regione: frontale che va da 15 a -15 gradi rispetto al centro dello scanner
-		intermediary = scan.ranges[:int(self.REGIONAL_ANGLE/2)]\
-					 + scan.ranges[(len(scan.ranges)-1)*int(self.REGIONAL_ANGLE/2):]
-		
+		intermediary = scan.ranges[:self.REGIONAL_ANGLE//2] + scan.ranges[len(scan.ranges)-self.REGIONAL_ANGLE//2:]
 		# Controlliamo la regione frontale è libera, in caso positivo salviamo il risultato della scannerizzazione
 		new_front_scan = []
 		for x in intermediary: 
@@ -72,7 +70,7 @@ class Avoider():
 			
 			# ...e scannerizziamole come fatto per la centrale
 			new_scan = []
-			for x in scan.ranges[self.REGIONAL_ANGLE*i : self.REGIONAL_ANGLE*(i+1)]:
+			for x in scan.ranges[self.REGIONAL_ANGLE*i-self.REGIONAL_ANGLE//2 : self.REGIONAL_ANGLE*i+self.REGIONAL_ANGLE//2]:
 				
 				# Salviamo il risultato se sono libere
 				if (x < self.OBSTACLE_DIST and x != 'inf' and x !=0):
@@ -85,8 +83,7 @@ class Avoider():
 	# Funzione che calcola il clearest path
 	def _clearance_test(self):
 
-		# Impostiamo i parametri desiderati
-		goal = "front_C"
+		# Impostiamo i valori iniziali per le nostre variabili
 		closest = 10e6
 		regional_dist = 0
 		maxima = {"destination": "back_C", "distance": 10e-6}
@@ -95,7 +92,7 @@ class Avoider():
 		for region in self.Regions_Report.items():
 
 			# Valutiamo le distanze delle varie regioni (ricordiamo che le regioni vengono salvate in un ordine preciso)
-			regional_dist = abs(self.Regions_Distances[region[0]]-self.Regions_Distances[goal])
+			regional_dist = abs(self.Regions_Distances[region[0]])
 			
 			# Se non ci sono ostacoli nella regione trovata...
 			if len(region[1]) == 0:
@@ -115,7 +112,7 @@ class Avoider():
 				maxima["destination"] = region[0]
 
 		# Calcoliamo il costo di rotazione del robot
-		regional_dist = self.Regions_Distances[maxima["destination"]] - self.Regions_Distances[goal]
+		best_dist = self.Regions_Distances[maxima["destination"]]
 		
 		# Risultati: ci muoviamo? (torniamo "act" come vero o falso)
 		if closest != 0:
@@ -124,12 +121,10 @@ class Avoider():
 			act = False
 		
 		# Risultati: ruotiamo? (torniamo "ang_vel" con il segno appropriato)
-		if regional_dist == 0:
-			denom = 1
+		if best_dist < 0:
+			ang_vel = - self.TRANS_ANG_VEL
 		else:
-			denom = abs(regional_dist)
-		
-		ang_vel = (regional_dist / denom) * self.TRANS_ANG_VEL
+			ang_vel = self.TRANS_ANG_VEL
 		
 		return act, ang_vel
 	

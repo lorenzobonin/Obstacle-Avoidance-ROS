@@ -58,8 +58,7 @@ class Avoider():
 				  ]
 
 		# Scannerizziamo la prima regione: frontale che va da 15 a -15 gradi rispetto al centro dello scanner
-		intermediary = scan.ranges[:int(self.REGIONAL_ANGLE/2)]\
-					 + scan.ranges[(len(scan.ranges)-1)*int(self.REGIONAL_ANGLE/2):]
+		intermediary = scan.ranges[:self.REGIONAL_ANGLE//2] + scan.ranges[len(scan.ranges)-self.REGIONAL_ANGLE//2:]
 		
 		# Controlliamo la regione frontale è libera, in caso positivo salviamo il risultato della scannerizzazione
 		new_front_scan = []
@@ -73,10 +72,13 @@ class Avoider():
 		for i, region in enumerate(REGIONS[1:]):
 			
 			# ...e scannerizziamole come fatto per la centrale
-			
+			new_scan = []
+			for x in scan.ranges[self.REGIONAL_ANGLE*i-self.REGIONAL_ANGLE//2 : self.REGIONAL_ANGLE*i+self.REGIONAL_ANGLE//2]:
+				
 				# Salviamo il risultato se sono libere
-			
-			
+				if (x < self.OBSTACLE_DIST and x != 'inf' and x !=0):
+					new_scan.append(x)
+					
 			self.Regions_Report[region] = new_scan
 			
 
@@ -84,8 +86,7 @@ class Avoider():
 	# Funzione che calcola il clearest path
 	def _clearance_test(self):
 
-		# Impostiamo i parametri desiderati
-		goal = "front_C"
+		# Impostiamo i valori iniziali per le nostre variabili
 		closest = 10e6
 		regional_dist = 0
 		maxima = {"destination": "back_C", "distance": 10e-6}
@@ -130,9 +131,9 @@ class Avoider():
 		:param ang_vel: Velocità angolare del robot
 		'''
 		if not steer:
-		
+			self.vel_obj.linear.x = self.NORMAL_LIN_VEL
 		else:
-		
+			self.vel_obj.linear.x = self.TRANS_LIN_VEL
 		# Impostiamo anche le altre velocità
 		self.vel_obj.linear.y  = 0
 		self.vel_obj.linear.z  = 0
@@ -145,12 +146,13 @@ class Avoider():
 	def avoid(self):
 
 		# Controlliamo se il percorso è libero
-		
-		
+		act, ang_vel = self._clearance_test()
+
 		# Se "act" è False, "ang_vel" è 0
-		
-		
+		if act == False:
+			ang_vel = 0.0
+
 		# Usiamo steer per guidare il robot
-		
+		self._steer(act, ang_vel)
 		
 		return self.vel_obj
